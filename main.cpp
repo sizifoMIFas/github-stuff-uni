@@ -32,13 +32,13 @@ double mediancalc(vector<int> ndvektorius){
     double median;
 
     sort(ndvektorius.begin(), ndvektorius.end());
-        //kai nelyginis, imi vidurini
+        
         if (ndvektorius.size() % 2 == true){
-            double median = ndvektorius[ndvektorius.size() / 2];
-        } else { // kai lyginis vektorius, randi du vidurinius indexus ir gauni vidurki is ju
+            median = ndvektorius[ndvektorius.size() / 2];
+        } else { 
             int upper = (ndvektorius.size() / 2);
             int lower = ((ndvektorius.size() / 2) - 1);
-            double median = ((ndvektorius[upper] + ndvektorius[lower]) / 2.0);
+            median = ((ndvektorius[upper] + ndvektorius[lower]) / 2.0);
         } 
 
     return median;
