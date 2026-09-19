@@ -3,12 +3,15 @@
 #include <string>
 #include <numeric>
 #include <iomanip>
+#include <algorithm>
+using namespace std;
+
 
 struct studentas {
 
-    std::string vardas;
-    std::string pavarde;
-    std::vector<int> ndpazymiai;
+    string vardas;
+    string pavarde;
+    vector<int> ndpazymiai;
     int egzrezultatas;
     double rezvidurkis;
     double rezmedian;
@@ -16,11 +19,29 @@ struct studentas {
 };
 
 
-double vidurkiscalc(std::vector<int> ndvektorius) {
+double vidurkiscalc(vector<int> ndvektorius) {
 
     int suma = accumulate(ndvektorius.begin(), ndvektorius.end(), 0);
     double vidurkis = (double)suma / ndvektorius.size();
+
     return vidurkis;
+
+}
+
+double mediancalc(vector<int> ndvektorius){
+    double median;
+
+    sort(ndvektorius.begin(), ndvektorius.end());
+        //kai nelyginis, imi vidurini
+        if (ndvektorius.size() % 2 == true){
+            double median = ndvektorius[ndvektorius.size() / 2];
+        } else { // kai lyginis vektorius, randi du vidurinius indexus ir gauni vidurki is ju
+            int upper = (ndvektorius.size() / 2);
+            int lower = ((ndvektorius.size() / 2) - 1);
+            double median = ((ndvektorius[upper] + ndvektorius[lower]) / 2.0);
+        } 
+
+    return median;
 
 }
 
@@ -35,60 +56,62 @@ double galutinis(double vidurkis, double egzas){
 
 void results(studentas s){
 
-    std::cout << std::fixed << std::setprecision(2);
+    cout << fixed << setprecision(2);
 
-    std::cout << std::left
-    << std::setw(12) << "vardas"
-    << std::setw(12) << "pavarde"
-    << std::setw(12) << "rezvidurkis" << std::endl;
+    cout << left
+    << setw(16) << "Vardas"
+    << setw(16) << "Pavarde"
+    << setw(16) << "Galutinis (vid)" 
+    << setw(16) << "Galutinis (med)" << endl;
 
-    std::cout << std::left
-    << std::setw(12) << s.vardas
-    << std::setw(12) << s.pavarde
-    << std::setw(12) << s.rezvidurkis << std::endl;
+    cout << left
+    << setw(16) << s.vardas
+    << setw(16) << s.pavarde
+    << setw(16) << s.rezvidurkis
+    << setw(16) << s.rezmedian << endl;
 
 }
 
 
-std::vector<int> ndloop(){
+vector<int> ndloop(){
     
-    std::vector<int> ndpazymiai = {};
+    vector<int> ndpazymiai = {};
 
-    std::cout << "kokie namu darbu rezultatai?" << std::endl;
-    std::cout << "(paspausk enter kai baigei ivedinet pazymius)" << std::endl;
+    cout << "kokie namu darbu rezultatai?" << endl;
+    cout << "(paspausk enter kai baigei ivedinet pazymius)" << endl;
 
     while (true) {
-        std::string line;
-        std::getline(std::cin, line);
+        string line;
+        getline(cin, line);
         if (line.empty()) {
             break;
         }
-        int ndrezultatas = std::stoi(line);
+        int ndrezultatas = stoi(line); 
         ndpazymiai.push_back(ndrezultatas);
-        } return ndpazymiai;
+        } return ndpazymiai; 
 
 }
 
 
 int main(){
 
-    std::string vardas;
-    std::string pavarde;
-    std::string fullname = vardas + pavarde;
+    string vardas;
+    string pavarde;
 
     int egzrezultatai;
 
-    std::cout << "ivesk savo varda:" << std::endl;
-    std::cin >> vardas;
-    std::cout << "ivesk savo pavarde:" << std::endl;
-    std::cin >> pavarde;
-    std::cin.ignore();
+    cout << "ivesk savo varda:" << endl;
+    cin >> vardas;
+    cout << "ivesk savo pavarde:" << endl;
+    cin >> pavarde;
+    cin.ignore();
     //"kiek gavai is nd?" etc
-    std::vector<int> ndpazymiai = ndloop();
+    vector<int> ndpazymiai = ndloop();
     vidurkiscalc(ndpazymiai);
+    // medianacalc(ndpazymiai);
 
-    std::cout << "kiek gavai is egzamino?:" << std::endl;
-    std::cin >> egzrezultatai;
+    cout << "kiek gavai is egzamino?:" << endl;
+    cin >> egzrezultatai;
 
     studentas s;
     s.vardas = vardas;
@@ -96,7 +119,7 @@ int main(){
     s.ndpazymiai = ndpazymiai;
     s.egzrezultatas = egzrezultatai;
     s.rezvidurkis = vidurkiscalc(ndpazymiai);
-    s.rezmedian = 0; 
+    s.rezmedian = mediancalc(ndpazymiai); 
 
     results(s);
 
