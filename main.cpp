@@ -4,6 +4,7 @@
 #include <numeric>
 #include <iomanip>
 #include <algorithm>
+#include <random>
 using namespace std;
 
 
@@ -19,16 +20,26 @@ struct studentas {
 };
 
 
-double vidurkiscalc(vector<int> ndvektorius) {
+double galutinis(double vidurkis_or_median, double egzas){
 
-    int suma = accumulate(ndvektorius.begin(), ndvektorius.end(), 0);
-    double vidurkis = (double)suma / ndvektorius.size();
-
-    return vidurkis;
+    double galutinisvid = ((double)vidurkis_or_median * 0.4) + (egzas * 0.6);
+    return galutinisvid;
 
 }
 
-double mediancalc(vector<int> ndvektorius){
+
+double vidurkiscalc(vector<int> ndvektorius, int examgrade) {
+
+    int suma = accumulate(ndvektorius.begin(), ndvektorius.end(), 0);
+    double vidurkis = (double)suma / ndvektorius.size();
+    double galutinisvid = galutinis(vidurkis, examgrade);
+    
+    return galutinisvid;
+
+}
+
+double mediancalc(vector<int> ndvektorius, int examgrade){
+
     double median;
 
     sort(ndvektorius.begin(), ndvektorius.end());
@@ -41,15 +52,8 @@ double mediancalc(vector<int> ndvektorius){
             median = ((ndvektorius[upper] + ndvektorius[lower]) / 2.0);
         } 
 
-    return median;
-
-}
-
-
-double galutinis(double vidurkis, double egzas){
-
-    double galutinis = ((double)vidurkis * 0.4) + (egzas * 0.6);
-    return galutinis;
+    double galutinismed = galutinis(median, examgrade);
+    return galutinismed;
 
 }
 
@@ -70,6 +74,19 @@ void results(studentas s){
     << setw(16) << s.rezvidurkis
     << setw(16) << s.rezmedian << endl;
 
+}
+
+
+vector<int> randomgrades(){
+
+    random_device rd;
+    vector<int> ndpazymiai;
+
+    for (int i = 0; i < 5; ++i) {
+        ndpazymiai.push_back(1 + (rd() % 10));
+    }
+
+    return ndpazymiai;
 }
 
 
@@ -95,33 +112,64 @@ vector<int> ndloop(){
 
 int main(){
 
+    vector<studentas> visistudentai;
     string vardas;
     string pavarde;
+    string aware;
+    random_device rd;
+    int egzrezultatas;
+    int pasirinkimas = 0;
 
-    int egzrezultatai;
+    while (pasirinkimas != 3) {
+        cout << "\n1. vardo, pavardes ivedimas" << endl;
+        cout << "2. rezultatai" << endl;
+        cout << "3. isejimas is programos" << endl;
+        cout << "pasirinkimas: ";
+        cin >> pasirinkimas;
+        cin.ignore();
 
-    cout << "ivesk savo varda:" << endl;
-    cin >> vardas;
-    cout << "ivesk savo pavarde:" << endl;
-    cin >> pavarde;
-    cin.ignore();
-    //"kiek gavai is nd?" etc
-    vector<int> ndpazymiai = ndloop();
-    vidurkiscalc(ndpazymiai);
-    // medianacalc(ndpazymiai);
+        if (pasirinkimas == 1) {
 
-    cout << "kiek gavai is egzamino?:" << endl;
-    cin >> egzrezultatai;
+            cout << "ivesk savo varda:" << endl;
+            cin >> vardas;
+            cout << "ivesk savo pavarde:" << endl;
+            cin >> pavarde;
+            cin.ignore();
+            cout << "ar zinai savo nd ir egzo rezultatus? jei ne, galima atsitiktinai sugeneruot (Y/N)" << endl;
+            cin >> aware;
 
-    studentas s;
-    s.vardas = vardas;
-    s.pavarde = pavarde;
-    s.ndpazymiai = ndpazymiai;
-    s.egzrezultatas = egzrezultatai;
-    s.rezvidurkis = vidurkiscalc(ndpazymiai);
-    s.rezmedian = mediancalc(ndpazymiai); 
+            vector<int> ndpazymiai;
 
-    results(s);
+            if (aware == "Y") {
+                ndpazymiai = ndloop();
+                cout << "kiek gavai is egzamino?:" << endl;
+                cin >> egzrezultatas;
+            } else {
+                ndpazymiai = randomgrades();
+                egzrezultatas = 1 + (rd() % 10);
+            }
+
+            studentas s;
+            s.vardas = vardas;
+            s.pavarde = pavarde;
+            s.ndpazymiai = ndpazymiai;
+            s.egzrezultatas = egzrezultatas;
+            s.rezvidurkis = vidurkiscalc(ndpazymiai, egzrezultatas);
+            s.rezmedian = mediancalc(ndpazymiai, egzrezultatas);
+            visistudentai.push_back(s);
+
+        }
+        else if (pasirinkimas == 2) {
+            for (auto s : visistudentai) {
+        results(s);
+        }
+        }
+        else if (pasirinkimas != 3) {
+            cout << "bandyk vel" << endl;
+        }
+    }
+
+    cout << "programa baigta" << endl;
+    return 0;
 
 }
-
