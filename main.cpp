@@ -113,6 +113,14 @@ vector<int> ndloop(){
 }
 
 
+bool lyginti(studentas a, studentas b) {
+    if (a.pavarde != b.pavarde) {
+        return a.pavarde < b.pavarde;
+    }
+    return a.vardas < b.vardas;
+}
+
+
 vector<studentas> fileread(){
 
     int filechoice;
@@ -188,12 +196,13 @@ int main(){
     int egzrezultatas;
     int pasirinkimas = 0;
 
-    while (pasirinkimas != 4) {
+    while (pasirinkimas != 5) {
 
         cout << "\n1. vardo, pavardes ivedimas" << endl;
         cout << "2. rezultatai" << endl;
         cout << "3. skaitymas is failo" << endl;
-        cout << "4. isejimas is programos" << endl;
+        cout << "4. isvalyti sarasa" << endl;
+        cout << "5. isejimas is programos" << endl;
         cout << "pasirinkimas: ";
         cin >> pasirinkimas;
         cin.ignore();
@@ -231,7 +240,8 @@ int main(){
         }
 
         else if (pasirinkimas == 2) {
-
+            
+            sort(visistudentai.begin(), visistudentai.end(), lyginti);
             printHeader();
             for (auto s : visistudentai) {
         results(s);
@@ -247,7 +257,14 @@ int main(){
 
         }
 
-        else if (pasirinkimas != 4) {
+        else if (pasirinkimas == 4) {
+
+            visistudentai.clear();
+            cout << "sarasas isvalytas" << endl;
+
+        }
+
+        else if (pasirinkimas != 5) {
 
             cout << "bandyk vel" << endl;
 
