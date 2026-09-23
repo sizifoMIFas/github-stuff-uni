@@ -5,10 +5,12 @@
 #include <iomanip>
 #include <algorithm>
 #include <random>
+#include <fstream>
+#include <sstream>
 using namespace std;
 
 
-struct studentas {
+struct studentas{
 
     string vardas;
     string pavarde;
@@ -28,7 +30,7 @@ double galutinis(double vidurkis_or_median, double egzas){
 }
 
 
-double vidurkiscalc(vector<int> ndvektorius, int examgrade) {
+double vidurkiscalc(vector<int> ndvektorius, int examgrade){
 
     int suma = accumulate(ndvektorius.begin(), ndvektorius.end(), 0);
     double vidurkis = (double)suma / ndvektorius.size();
@@ -37,6 +39,7 @@ double vidurkiscalc(vector<int> ndvektorius, int examgrade) {
     return galutinisvid;
 
 }
+
 
 double mediancalc(vector<int> ndvektorius, int examgrade){
 
@@ -58,22 +61,21 @@ double mediancalc(vector<int> ndvektorius, int examgrade){
 }
 
 
-void results(studentas s){
-
+void printHeader(){
     cout << fixed << setprecision(2);
-
     cout << left
-    << setw(16) << "Vardas"
-    << setw(16) << "Pavarde"
-    << setw(16) << "Galutinis (vid)" 
-    << setw(16) << "Galutinis (med)" << endl;
+    << setw(20) << "Pavarde"
+    << setw(20) << "vardas"
+    << setw(20) << "Galutinis (vid)" 
+    << setw(20) << "Galutinis (med)" << endl;
+}
 
+void results(studentas s){
     cout << left
-    << setw(16) << s.vardas
-    << setw(16) << s.pavarde
-    << setw(16) << s.rezvidurkis
-    << setw(16) << s.rezmedian << endl;
-
+    << setw(20) << s.pavarde
+    << setw(20) << s.vardas
+    << setw(20) << s.rezvidurkis
+    << setw(20) << s.rezmedian << endl;
 }
 
 
@@ -87,6 +89,7 @@ vector<int> randomgrades(){
     }
 
     return ndpazymiai;
+
 }
 
 
@@ -110,6 +113,49 @@ vector<int> ndloop(){
 }
 
 
+vector<studentas> fileread(){
+
+    string file = "kursiokai.txt";
+    ifstream failas(file);
+    vector<studentas> sarasas;
+
+    if (!failas.is_open()){
+        cout << "nepavyko atidaryti failo" << endl;
+        return sarasas;
+    }
+
+    string eilute;
+
+    while (getline(failas, eilute)) {
+        if (eilute.empty()) continue;
+
+        stringstream ss(eilute);
+        studentas s;
+        ss >> s.pavarde >> s.vardas;
+
+        vector<int> visiSkaiciai;
+        int skaicius;
+        while (ss >> skaicius) {
+            visiSkaiciai.push_back(skaicius);
+        }
+
+        if (visiSkaiciai.empty()) continue;
+
+        s.egzrezultatas = visiSkaiciai.back();
+        visiSkaiciai.pop_back();
+        s.ndpazymiai = visiSkaiciai;
+        s.rezvidurkis = vidurkiscalc(s.ndpazymiai, s.egzrezultatas);
+        s.rezmedian = mediancalc(s.ndpazymiai, s.egzrezultatas);
+
+        sarasas.push_back(s);
+    }
+
+    failas.close();
+    return sarasas;
+
+}
+
+
 int main(){
 
     vector<studentas> visistudentai;
@@ -120,10 +166,12 @@ int main(){
     int egzrezultatas;
     int pasirinkimas = 0;
 
-    while (pasirinkimas != 3) {
+    while (pasirinkimas != 4) {
+
         cout << "\n1. vardo, pavardes ivedimas" << endl;
         cout << "2. rezultatai" << endl;
-        cout << "3. isejimas is programos" << endl;
+        cout << "3. skaitymas is failo" << endl;
+        cout << "4. isejimas is programos" << endl;
         cout << "pasirinkimas: ";
         cin >> pasirinkimas;
         cin.ignore();
@@ -159,14 +207,30 @@ int main(){
             visistudentai.push_back(s);
 
         }
+
         else if (pasirinkimas == 2) {
+
+            printHeader();
             for (auto s : visistudentai) {
         results(s);
         }
         }
-        else if (pasirinkimas != 3) {
-            cout << "bandyk vel" << endl;
+
+        else if (pasirinkimas == 3){
+
+            vector<studentas> failoStudentai = fileread();
+            for (auto s : failoStudentai) {
+                visistudentai.push_back(s);
+            }
+
         }
+
+        else if (pasirinkimas != 4) {
+
+            cout << "bandyk vel" << endl;
+
+        }
+
     }
 
     cout << "programa baigta" << endl;
