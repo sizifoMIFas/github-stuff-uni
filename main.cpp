@@ -115,6 +115,16 @@ vector<int> ndloop(){
 
 vector<studentas> fileread(){
 
+    int filechoice;
+
+    cout << "is kurio failo nori skaityti?" << endl;
+    cout << "1. kursiokai.txt" << endl;
+    cout << "2. 10k studentu" << endl;
+    cout << "3. 100k studentu" << endl;
+    cout << "4. 1m studentu" << endl;
+    cout << "pasirinkimas" << endl;
+    cin >> filechoice;
+
     string file = "kursiokai.txt";
     ifstream failas(file);
     vector<studentas> sarasas;
