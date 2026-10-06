@@ -22,6 +22,28 @@ struct studentas{
 };
 
 
+void filegenerator(){
+    int kiekis = 1000;
+    while ( kiekis < 10000001){
+    string pavadinimas = "studentai_generated" + to_string(kiekis) + ".txt";
+    ofstream file(pavadinimas);
+    for (int i = 1; i <= kiekis; i++){ // zmoniu numeravimas
+        file << "vardas" << i << " pavarde" << i;
+    for (int j = 0; j < 5; j++){ // nd, po 5
+        file << " " << (rand() % 10 + 1);
+    }
+    file << " " << (rand() % 10 + 1) << "\n"; // egzas
+    }
+    kiekis *= 10;
+    }   
+}
+
+
+//    srand(time(0));
+//    generuotiFaila(1000, "studentai1000.txt");
+//    cout << "done" << endl;
+
+
 double galutinis(double vidurkis_or_median, double egzas){
 
     double galutinisvid = ((double)vidurkis_or_median * 0.4) + (egzas * 0.6);
@@ -125,28 +147,85 @@ bool lyginti(studentas a, studentas b) {
 vector<studentas> fileread(){
 
     int filechoice;
+    
     string file;
 
-    cout << "is kurio failo nori skaityti?" << endl;
-    cout << "1. kursiokai.txt" << endl;
-    cout << "2. 10k studentu" << endl;
-    cout << "3. 100k studentu" << endl;
-    cout << "4. 1m studentu" << endl;
-    cout << "pasirinkimas" << endl;
-    cin >> filechoice;
+    while (file.empty()){
 
-    if (filechoice == 1){
-        file = "kursiokai.txt";
-    } else if (filechoice == 2){
-        file = "studentai10000.txt";
-    } else if (filechoice == 3){
-        file = "studentai100000.txt";
-    } else if (filechoice == 4){
-        file = "studentai1000000.txt";
-    } else {
-        cout << "error" << endl;
+        int pasirinkimas;
+        int filechoice;
+
+        cout << "" << endl;
+        cout << "is kokiu failu nori skaityti?" << endl;
+        cout << "1. pries tai pateiktu (kursiokai.txt ir pan)" << endl;
+        cout << "2. ka tik sugeneruotu failu (iki 10,000,000 studentu)" << endl;
+        cout << "(spausk 0 kad sugrizti)" << endl;
+        cout << "pasirinkimas" << endl;
+        cin >> pasirinkimas;
+
+        if (pasirinkimas == 0){
+            return {};
+        }
+
+        else if (pasirinkimas == 1){
+            
+            cout << "" << endl;
+            cout << "duoti failai" << endl;
+            cout << "1. kursiokai.txt" << endl;
+            cout << "2. 10k studentu" << endl;
+            cout << "3. 100k studentu" << endl;
+            cout << "4. 1m studentu" << endl;
+            cout << "pasirinkimas" << endl;
+            cin >> filechoice;
+
+            if (filechoice == 1){
+                file = "kursiokai.txt";
+            } else if (filechoice == 2){
+                file = "studentai10000.txt";
+            } else if (filechoice == 3){
+                file = "studentai100000.txt";
+            } else if (filechoice == 4){
+                file = "studentai1000000.txt";
+            } else {
+                cout << "error, bandyk vel" << endl;
+            }
+
+        }
+
+        else if (pasirinkimas == 2){
+
+            cout << "" << endl;
+            cout << "sugeneruoti failai" << endl;
+            cout << "1. 1k studentu" << endl;
+            cout << "2. 10k studentu" << endl;
+            cout << "3. 100k studentu" << endl;
+            cout << "4. 1m studentu" << endl;
+            cout << "5. 10m studentu" << endl;
+            cout << "pasirinkimas" << endl;
+            cin >> filechoice;
+
+            if (filechoice == 1){
+                file = "studentai_generated1000.txt";
+            } else if (filechoice == 2){
+                file = "studentai_generated10000.txt";
+            } else if (filechoice == 3){
+                file = "studentai_generated100000.txt";
+            } else if (filechoice == 4){
+                file = "studentai_generated1000000.txt";
+            } else if (filechoice == 5){
+                file = "studentai_generated10000000.txt";
+            } else {
+                cout << "error, bandyk vel" << endl;
+            }
+
+        }
+
+        else {
+            cout << "error, bandyk vel" << endl;
+        }
+
     }
-
+    
     ifstream failas(file);
     vector<studentas> sarasas;
 
@@ -179,6 +258,7 @@ vector<studentas> fileread(){
         s.rezmedian = mediancalc(s.ndpazymiai, s.egzrezultatas);
 
         sarasas.push_back(s);
+        
     }
 
     failas.close();
@@ -189,6 +269,8 @@ vector<studentas> fileread(){
 
 int main(){
 
+    filegenerator();
+
     vector<studentas> visistudentai;
     string vardas;
     string pavarde;
@@ -197,19 +279,21 @@ int main(){
     int egzrezultatas;
     int pasirinkimas = 0;
 
-    while (pasirinkimas != 5) {
+    while (pasirinkimas != 6) {
 
         cout << "\n1. vardo, pavardes ivedimas" << endl;
         cout << "2. rezultatai" << endl;
         cout << "3. skaitymas is failo" << endl;
-        cout << "4. isvalyti sarasa" << endl;
-        cout << "5. isejimas is programos" << endl;
+        cout << "4. failu generavimas" << endl;
+        cout << "5. isvalyti sarasa" << endl;
+        cout << "6. isejimas is programos" << endl;
         cout << "pasirinkimas: ";
         cin >> pasirinkimas;
         cin.ignore();
 
         if (pasirinkimas == 1) {
 
+            cout << "" << endl;
             cout << "ivesk savo varda:" << endl;
             cin >> vardas;
             cout << "ivesk savo pavarde:" << endl;
@@ -246,27 +330,34 @@ int main(){
             sort(visistudentai.begin(), visistudentai.end(), lyginti);
             printHeader();
             for (auto s : visistudentai) {
-        results(s);
-        }
+            results(s);
         }
 
-        else if (pasirinkimas == 3){
+        }
 
+        else if (pasirinkimas == 3) {
+          
             vector<studentas> failoStudentai = fileread();
             for (auto s : failoStudentai) {
                 visistudentai.push_back(s);
             }
-
+        
         }
 
         else if (pasirinkimas == 4) {
+
+            filegenerator();
+
+        }
+
+        else if (pasirinkimas == 5) {
 
             visistudentai.clear();
             cout << "sarasas isvalytas" << endl;
 
         }
 
-        else if (pasirinkimas != 5) {
+        else if (pasirinkimas != 6) {
 
             cout << "bandyk vel" << endl;
 
@@ -274,11 +365,6 @@ int main(){
 
     }
 
-    cout << "programa baigta" << endl;
     return 0;
 
 }
-
-
-
-
