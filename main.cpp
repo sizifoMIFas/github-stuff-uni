@@ -70,6 +70,7 @@ void printHeader(){
     << setw(20) << "Galutinis (med)" << endl;
 }
 
+
 void results(studentas s){
     cout << left
     << setw(20) << s.pavarde
@@ -216,6 +217,7 @@ int main(){
             cin.ignore();
             cout << "ar zinai savo nd ir egzo rezultatus? jei ne, galima atsitiktinai sugeneruot (Y/N)" << endl;
             cin >> aware;
+            cin.ignore();
 
             vector<int> ndpazymiai;
 
@@ -276,3 +278,7 @@ int main(){
     return 0;
 
 }
+
+
+
+
