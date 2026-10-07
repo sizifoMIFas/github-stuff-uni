@@ -226,8 +226,8 @@ string filechoice(){
 
         }
 
-        else 
-        {
+        else {
+
             cout << "error, bandyk vel" << endl;
 
         }
@@ -285,11 +285,44 @@ vector<studentas> fileread(string file){
 }
 
 
-void studentsplit(){
-    
-    // paima faila kuri selectinai
-    // perskaito
-    // paskirsto i du listus studentus
+auto studentsplit(vector<studentas> visistudentai){
+
+    vector<studentas> nerdai;
+    vector<studentas> nelaimingi;
+
+    for (auto s : visistudentai){
+        if (s.rezvidurkis < 5){
+            nelaimingi.push_back(s);
+        } else {
+            nerdai.push_back(s);
+        }
+    }
+
+    pair <vector<studentas>, vector<studentas>> lists = make_pair(nerdai, nelaimingi);
+    return lists;
+
+}
+
+
+void gradedfiles(vector<studentas> nerdai, vector<studentas> nelaimingi){
+
+    string nerdfile = "nerdai.txt";
+    ofstream failas1(nerdfile);
+
+    for (auto s : nerdai){
+
+        failas1 << s.vardas << " " << s.pavarde << " " << s.rezvidurkis << " " << s.rezmedian << "\n";
+
+    }
+
+    string nelaimingifile = "nelaimingi.txt";
+    ofstream failas2(nelaimingifile);
+
+    for (auto s : nelaimingi){
+        
+        failas2 << s.vardas << " " << s.pavarde << " " << s.rezvidurkis << " " << s.rezmedian << "\n";
+
+    }
 
 }
 
@@ -297,6 +330,7 @@ void studentsplit(){
 int main(){
 
     vector<studentas> visistudentai;
+
     string vardas;
     string pavarde;
     string aware;
@@ -360,13 +394,24 @@ int main(){
             results(s);
             }
 
-            cout << "" << endl;
-            cout << "ar suskirstyti mokinius pagal rezultatus (0-5; 5-10)? (Y/N)" << endl;
-            cout << "(bus sugeneruoti du failai)" << endl;
-            cout << "pasirinkimas:" << endl;
-            cin >> choice;
-
-            //funkcija kuri generuoja tuos susiktus failus: void rusiavimas()
+            while (choice != "Y" && choice != "N"){
+                cout << "" << endl;
+                cout << "ar suskirstyti mokinius pagal rezultatus (0-5; 5-10)? (Y/N)" << endl;
+                cout << "(bus sugeneruoti du failai)" << endl;
+                cout << "pasirinkimas:" << endl;
+                cin >> choice;
+            
+                if (choice == "Y"){
+                
+                    auto [nerdai, nelaimingi] = studentsplit(visistudentai);
+                    gradedfiles(nerdai, nelaimingi);
+                
+                } else if (choice != "N"){
+                
+                    cout << "error" << endl;
+                
+                }
+            }
 
         }
 
