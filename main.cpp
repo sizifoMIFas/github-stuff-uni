@@ -152,7 +152,9 @@ bool lyginti(studentas a, studentas b){
 }
 
 
-vector<studentas> lenteleskaitymui(){
+string filechoice(){
+
+    string file;
 
     while (file.empty()){
 
@@ -224,12 +226,16 @@ vector<studentas> lenteleskaitymui(){
 
         }
 
-        else {
+        else 
+        {
             cout << "error, bandyk vel" << endl;
+
         }
 
     }
+
     return file;
+
 }
 
 
@@ -247,7 +253,7 @@ vector<studentas> fileread(string file){
 
     string eilute;
 
-    while (getline(failas, eilute)) {
+    while (getline(failas, eilute)){
 
         if (eilute.empty()) continue;
 
@@ -279,6 +285,15 @@ vector<studentas> fileread(string file){
 }
 
 
+void studentsplit(){
+    
+    // paima faila kuri selectinai
+    // perskaito
+    // paskirsto i du listus studentus
+
+}
+
+
 int main(){
 
     vector<studentas> visistudentai;
@@ -289,7 +304,7 @@ int main(){
     int egzrezultatas;
     int pasirinkimas = 0;
 
-    while (pasirinkimas != 6) {
+    while (pasirinkimas != 6){
 
         cout << "\n1. vardo, pavardes ivedimas" << endl;
         cout << "2. rezultatai" << endl;
@@ -301,7 +316,7 @@ int main(){
         cin >> pasirinkimas;
         cin.ignore();
 
-        if (pasirinkimas == 1) {
+        if (pasirinkimas == 1){
 
             cout << "" << endl;
             cout << "ivesk savo varda:" << endl;
@@ -335,10 +350,10 @@ int main(){
 
         }
 
-        else if (pasirinkimas == 2) {
+        else if (pasirinkimas == 2){
 
             string choice;
-            
+
             sort(visistudentai.begin(), visistudentai.end(), lyginti);
             printHeader();
             for (auto s : visistudentai) {
@@ -355,29 +370,31 @@ int main(){
 
         }
 
-        else if (pasirinkimas == 3) {
+        else if (pasirinkimas == 3){
+
+            string file = filechoice();
           
-            vector<studentas> failoStudentai = fileread();
+            vector<studentas> failoStudentai = fileread(file);
             for (auto s : failoStudentai) {
                 visistudentai.push_back(s);
             }
         
         }
 
-        else if (pasirinkimas == 4) {
+        else if (pasirinkimas == 4){
 
             filegenerator();
 
         }
 
-        else if (pasirinkimas == 5) {
+        else if (pasirinkimas == 5){
 
             visistudentai.clear();
             cout << "sarasas isvalytas" << endl;
 
         }
 
-        else if (pasirinkimas != 6) {
+        else if (pasirinkimas != 6){
 
             cout << "bandyk vel" << endl;
 
@@ -387,56 +404,4 @@ int main(){
 
     return 0;
 
-}
-
-
-
-void rusiavimas(string failas){
-
-    // sugeneruoji failus
-
-    string pirmasfile = "nerdai.txt";
-    string antrasfile = "nelaimingi.txt";
-    ofstream file1(pirmasfile);
-    ofstream file2(antrasfile);
-
-    // paimi sugeneruota faila
-
-        // paimi butent ta faila kuri pasirinko generuot
-        ifstream file(failas);
-
-        string eilute;
-        vector<studentas> sarasas;
-
-        while (getline(file, eilute)) {
-            
-            if (eilute.empty()) continue;
-            
-            stringstream ss(eilute);
-            studentas s;
-            ss >> s.pavarde >> s.vardas;
-            
-            vector<int> visiSkaiciai;
-            int skaicius;
-            while (ss >> skaicius) {
-                visiSkaiciai.push_back(skaicius);
-            }
-        
-            if (visiSkaiciai.empty()) continue;
-        
-            s.egzrezultatas = visiSkaiciai.back();
-            visiSkaiciai.pop_back();
-            s.ndpazymiai = visiSkaiciai;
-            s.rezvidurkis = vidurkiscalc(s.ndpazymiai, s.egzrezultatas);
-            s.rezmedian = mediancalc(s.ndpazymiai, s.egzrezultatas);
-        
-            sarasas.push_back(s);
-    
-        }
-        
-        // 
-
-    // istrauki nd ir egzo rezultatus
-    // apskaiciuoji galutini
-    // paskirstai i kuri faila turi nueiti
 }
