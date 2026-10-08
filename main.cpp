@@ -7,7 +7,9 @@
 #include <random>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 using namespace std;
+using namespace std::chrono;
 
 
 struct studentas{
@@ -38,18 +40,12 @@ void filegenerator(){
     }
 
     file << " " << (rand() % 10 + 1) << "\n"; // egzas
-
     }
 
     kiekis *= 10;
-
     }   
+
 }
-
-
-//    srand(time(0));
-//    generuotiFaila(1000, "studentai1000.txt");
-//    cout << "done" << endl;
 
 
 double galutinis(double vidurkis_or_median, double egzas){
@@ -79,7 +75,9 @@ double mediancalc(vector<int> ndvektorius, int examgrade){
         
         if (ndvektorius.size() % 2 == true){
             median = ndvektorius[ndvektorius.size() / 2];
-        } else { 
+        } 
+        
+        else { 
             int upper = (ndvektorius.size() / 2);
             int lower = ((ndvektorius.size() / 2) - 1);
             median = ((ndvektorius[upper] + ndvektorius[lower]) / 2.0);
@@ -92,21 +90,25 @@ double mediancalc(vector<int> ndvektorius, int examgrade){
 
 
 void printHeader(){
+
     cout << fixed << setprecision(2);
     cout << left
     << setw(20) << "Pavarde"
     << setw(20) << "vardas"
     << setw(20) << "Galutinis (vid)"
     << setw(20) << "Galutinis (med)" << endl;
+
 }
 
 
 void results(studentas s){
+
     cout << left
     << setw(20) << s.pavarde
     << setw(20) << s.vardas
     << setw(20) << s.rezvidurkis
     << setw(20) << s.rezmedian << endl;
+
 }
 
 
@@ -132,23 +134,30 @@ vector<int> ndloop(){
     cout << "(paspausk enter kai baigei ivedinet pazymius)" << endl;
 
     while (true) {
+
         string line;
         getline(cin, line);
+
         if (line.empty()) {
             break;
         }
+
         int ndrezultatas = stoi(line); 
         ndpazymiai.push_back(ndrezultatas);
-        } return ndpazymiai; 
+    } 
+        
+    return ndpazymiai; 
 
 }
 
 
 bool lyginti(studentas a, studentas b){
+
     if (a.pavarde != b.pavarde) {
         return a.pavarde < b.pavarde;
     }
     return a.vardas < b.vardas;
+
 }
 
 
@@ -195,7 +204,6 @@ string filechoice(){
             } else {
                 cout << "error, bandyk vel" << endl;
             }
-
         }
 
         else if (pasirinkimas == 2){
@@ -223,15 +231,11 @@ string filechoice(){
             } else {
                 cout << "error, bandyk vel" << endl;
             }
-
         }
 
         else {
-
             cout << "error, bandyk vel" << endl;
-
         }
-
     }
 
     return file;
@@ -243,15 +247,12 @@ vector<studentas> fileread(string file){
 
     ifstream failas(file);
     vector<studentas> sarasas;
+    string eilute;
 
     if (!failas.is_open()){
-
         cout << "nepavyko atidaryti failo" << endl;
         return sarasas;
-
     }
-
-    string eilute;
 
     while (getline(failas, eilute)){
 
@@ -274,7 +275,6 @@ vector<studentas> fileread(string file){
         s.ndpazymiai = visiSkaiciai;
         s.rezvidurkis = vidurkiscalc(s.ndpazymiai, s.egzrezultatas);
         s.rezmedian = mediancalc(s.ndpazymiai, s.egzrezultatas);
-
         sarasas.push_back(s);
         
     }
@@ -310,20 +310,29 @@ void gradedfiles(vector<studentas> nerdai, vector<studentas> nelaimingi){
     ofstream failas1(nerdfile);
 
     for (auto s : nerdai){
-
         failas1 << s.vardas << " " << s.pavarde << " " << s.rezvidurkis << " " << s.rezmedian << "\n";
-
     }
 
     string nelaimingifile = "nelaimingi.txt";
     ofstream failas2(nelaimingifile);
 
     for (auto s : nelaimingi){
-        
         failas2 << s.vardas << " " << s.pavarde << " " << s.rezvidurkis << " " << s.rezmedian << "\n";
-
     }
 
+}
+
+
+auto clockstart(){
+    auto start = high_resolution_clock::now();
+    return start;
+}
+
+
+double clockend(high_resolution_clock::time_point start){
+    auto end = high_resolution_clock::now();
+    auto laikas = duration<double>(end - start);
+    return laikas.count();
 }
 
 
@@ -381,7 +390,6 @@ int main(){
             s.rezvidurkis = vidurkiscalc(ndpazymiai, egzrezultatas);
             s.rezmedian = mediancalc(ndpazymiai, egzrezultatas);
             visistudentai.push_back(s);
-
         }
 
         else if (pasirinkimas == 2){
@@ -402,17 +410,12 @@ int main(){
                 cin >> choice;
             
                 if (choice == "Y"){
-                
                     auto [nerdai, nelaimingi] = studentsplit(visistudentai);
                     gradedfiles(nerdai, nelaimingi);
-                
-                } else if (choice != "N"){
-                
+                } else if (choice != "N"){               
                     cout << "error" << endl;
-                
                 }
             }
-
         }
 
         else if (pasirinkimas == 3){
@@ -423,30 +426,30 @@ int main(){
             for (auto s : failoStudentai) {
                 visistudentai.push_back(s);
             }
-        
         }
 
         else if (pasirinkimas == 4){
 
+            cout << "" << endl;
+            cout << "generuojami failai..." << endl;
+            auto t = clockstart();
             filegenerator();
-
+            cout << "failai sugeneruoti per: " << clockend(t) << " sekundes" << endl;
         }
 
         else if (pasirinkimas == 5){
-
             visistudentai.clear();
             cout << "sarasas isvalytas" << endl;
-
         }
 
         else if (pasirinkimas != 6){
-
             cout << "bandyk vel" << endl;
-
         }
-
     }
 
     return 0;
 
 }
+
+
+
