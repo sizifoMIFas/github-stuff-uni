@@ -8,6 +8,7 @@
 #include <fstream>
 #include <sstream>
 #include <chrono>
+#include <ctime>
 using namespace std;
 using namespace std::chrono;
 
@@ -58,6 +59,10 @@ double galutinis(double vidurkis_or_median, double egzas){
 
 double vidurkiscalc(vector<int> ndvektorius, int examgrade){
 
+if (ndvektorius.empty()){
+    return galutinis(0, examgrade);
+}
+
     int suma = accumulate(ndvektorius.begin(), ndvektorius.end(), 0);
     double vidurkis = (double)suma / ndvektorius.size();
     double galutinisvid = galutinis(vidurkis, examgrade);
@@ -68,6 +73,10 @@ double vidurkiscalc(vector<int> ndvektorius, int examgrade){
 
 
 double mediancalc(vector<int> ndvektorius, int examgrade){
+
+if (ndvektorius.empty()){
+    return galutinis(0, examgrade);
+}
 
     double median;
 
@@ -161,6 +170,33 @@ bool lyginti(studentas a, studentas b){
 }
 
 
+bool pagalVarda(const studentas& a, const studentas& b){
+
+    if (a.vardas != b.vardas) {
+        return a.vardas < b.vardas;
+    }
+    return a.pavarde < b.pavarde;
+
+}
+
+
+bool pagalPavarde(const studentas& a, const studentas& b){
+
+    if (a.pavarde != b.pavarde) {
+        return a.pavarde < b.pavarde;
+    }
+    return a.vardas < b.vardas;
+
+}
+
+
+bool pagalGalutini(const studentas& a, const studentas& b){
+
+    return a.rezvidurkis < b.rezvidurkis;
+    
+}
+
+
 string filechoice(){
 
     string file;
@@ -233,7 +269,7 @@ string filechoice(){
             }
         }
 
-        else {
+        else if (pasirinkimas != 1 && pasirinkimas != 2 && pasirinkimas != 0){
             cout << "error, bandyk vel" << endl;
         }
     }
@@ -250,7 +286,7 @@ vector<studentas> fileread(string file){
     string eilute;
 
     if (!failas.is_open()){
-        cout << "nepavyko atidaryti failo" << endl;
+        cout << "nepavyko atidaryti failo. galbut uzmirsai sugeneruot failus." << endl;
         return sarasas;
     }
 
@@ -285,12 +321,12 @@ vector<studentas> fileread(string file){
 }
 
 
-auto studentsplit(vector<studentas> visistudentai){
+auto studentsplit(const vector<studentas>& visistudentai){
 
     vector<studentas> nerdai;
     vector<studentas> nelaimingi;
 
-    for (auto s : visistudentai){
+    for (const auto& s : visistudentai){
         if (s.rezvidurkis < 5){
             nelaimingi.push_back(s);
         } else {
@@ -304,19 +340,19 @@ auto studentsplit(vector<studentas> visistudentai){
 }
 
 
-void gradedfiles(vector<studentas> nerdai, vector<studentas> nelaimingi){
+void gradedfiles(const vector<studentas>& nerdai, const vector<studentas>& nelaimingi, string pavadinimas){
 
-    string nerdfile = "nerdai.txt";
+    string nerdfile = "nerdai_" + pavadinimas;
     ofstream failas1(nerdfile);
 
-    for (auto s : nerdai){
+    for (const auto& s : nerdai){
         failas1 << s.vardas << " " << s.pavarde << " " << s.rezvidurkis << " " << s.rezmedian << "\n";
     }
 
-    string nelaimingifile = "nelaimingi.txt";
+    string nelaimingifile = "nelaimingi_" + pavadinimas;
     ofstream failas2(nelaimingifile);
 
-    for (auto s : nelaimingi){
+    for (const auto& s : nelaimingi){
         failas2 << s.vardas << " " << s.pavarde << " " << s.rezvidurkis << " " << s.rezmedian << "\n";
     }
 
@@ -339,16 +375,74 @@ double clockend(high_resolution_clock::time_point start){
 }
 
 
+int rusiavimomenu(){
+
+    int pasirinkimas = 0;
+
+    while (pasirinkimas < 1 || pasirinkimas > 3){
+
+        cout << "" << endl;
+        cout << "kaip surusiuoti failus?" << endl;
+        cout << "1. pagal varda" << endl;
+        cout << "2. pagal pavarde" << endl;
+        cout << "3. pagal galutini bala" << endl;
+        cout << "pasirinkimas:" << endl;
+
+        if (!(cin >> pasirinkimas)){
+            cin.clear();
+            cin.ignore(10000, '\n');
+            pasirinkimas = 0;
+        }
+
+        if (pasirinkimas < 1 || pasirinkimas > 3){
+            cout << "error, bandyk vel" << endl;
+        }
+    }
+
+    return pasirinkimas;
+
+}
+
+
+void rusiavimoinfo(int rusiavimas, string paskutinisfailas, const vector<studentas>& visistudentai){
+
+    cout << "studentai rusiuojami..." << endl;
+    auto t = clockstart();
+    auto [nerdai, nelaimingi] = studentsplit(visistudentai);
+    cout << "studentai surusiuoti per: " << clockend(t) << " sekundes" << endl;
+    cout << "failai rikiuojami..." << endl;
+    auto t2 = clockstart();
+
+    if (rusiavimas == 1){
+        sort(nerdai.begin(), nerdai.end(), pagalVarda);
+        sort(nelaimingi.begin(), nelaimingi.end(), pagalVarda);
+    } else if (rusiavimas == 2){
+        sort(nerdai.begin(), nerdai.end(), pagalPavarde);
+        sort(nelaimingi.begin(), nelaimingi.end(), pagalPavarde);
+    } else {
+        sort(nerdai.begin(), nerdai.end(), pagalGalutini);
+        sort(nelaimingi.begin(), nelaimingi.end(), pagalGalutini);
+    }
+    cout << "failai surikiuoti per: " << clockend(t2) << " sekundes" << endl;
+
+    cout << "irasomi failai..." << endl;
+    auto t3 = clockstart();
+    gradedfiles(nerdai, nelaimingi, paskutinisfailas);
+    cout << "failai irasyti per: " << clockend(t3) << " sekundes" << endl;
+}
+
+
 int main(){
 
+    srand(time(0));
     vector<studentas> visistudentai;
-
     string vardas;
     string pavarde;
     string aware;
     random_device rd;
     int egzrezultatas;
     int pasirinkimas = 0;
+    string paskutinisfailas;
 
     while (pasirinkimas != 6){
 
@@ -413,28 +507,22 @@ int main(){
                 cin >> choice;
             
                 if (choice == "Y"){
+                int rusiavimas = rusiavimomenu();
+                rusiavimoinfo(rusiavimas, paskutinisfailas, visistudentai);
+                }
 
-                    cout << "studentai rusiuojami..." << endl;
-                    auto t = clockstart();
-                    auto [nerdai, nelaimingi] = studentsplit(visistudentai);
-                    cout << "studentai surusiuoti per: " << clockend(t) << " sekundes" << endl;
-
-                    cout << "generuojami failai..." << endl;
-                    auto s = clockstart();
-                    gradedfiles(nerdai, nelaimingi);
-                    cout << "failai sugeneruoti per: " << clockend(s) << " sekundes" << endl;
-                } 
-                
                 else if (choice != "N"){               
                     cout << "error" << endl;
                 }
             }
+            visistudentai.clear();
         }
 
         else if (pasirinkimas == 3){
 
             string file = filechoice();
-          
+            paskutinisfailas = file;
+            
             auto t = clockstart();
             vector<studentas> failoStudentai = fileread(file);
             cout << "failas nuskaitytas per: " << clockend(t) << " sekundes" << endl;

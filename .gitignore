@@ -6,4 +6,7 @@ main
 kursiokai.txt
 nerdai.txt
 nelaimingi.txt
-
+main
+studentai_generated*.txt
+nerdai_*
+nelaimingi*
