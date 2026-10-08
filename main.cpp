@@ -324,12 +324,15 @@ void gradedfiles(vector<studentas> nerdai, vector<studentas> nelaimingi){
 
 
 auto clockstart(){
+
     auto start = high_resolution_clock::now();
     return start;
+
 }
 
 
 double clockend(high_resolution_clock::time_point start){
+    
     auto end = high_resolution_clock::now();
     auto laikas = duration<double>(end - start);
     return laikas.count();
@@ -410,9 +413,19 @@ int main(){
                 cin >> choice;
             
                 if (choice == "Y"){
+
+                    cout << "studentai rusiuojami..." << endl;
+                    auto t = clockstart();
                     auto [nerdai, nelaimingi] = studentsplit(visistudentai);
+                    cout << "studentai surusiuoti per: " << clockend(t) << " sekundes" << endl;
+
+                    cout << "generuojami failai..." << endl;
+                    auto s = clockstart();
                     gradedfiles(nerdai, nelaimingi);
-                } else if (choice != "N"){               
+                    cout << "failai sugeneruoti per: " << clockend(s) << " sekundes" << endl;
+                } 
+                
+                else if (choice != "N"){               
                     cout << "error" << endl;
                 }
             }
@@ -422,7 +435,9 @@ int main(){
 
             string file = filechoice();
           
+            auto t = clockstart();
             vector<studentas> failoStudentai = fileread(file);
+            cout << "failas nuskaitytas per: " << clockend(t) << " sekundes" << endl;
             for (auto s : failoStudentai) {
                 visistudentai.push_back(s);
             }
@@ -443,13 +458,11 @@ int main(){
         }
 
         else if (pasirinkimas != 6){
-            cout << "bandyk vel" << endl;
+            cout << "" << endl;
+            cout << "error! bandyk vel" << endl;
         }
     }
 
     return 0;
 
 }
-
-
-
