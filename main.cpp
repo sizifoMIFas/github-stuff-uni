@@ -67,6 +67,7 @@ int main(){
             s.rezvidurkis = vidurkiscalc(ndpazymiai, egzrezultatas);
             s.rezmedian = mediancalc(ndpazymiai, egzrezultatas);
             visistudentai.push_back(s);
+            cout << &visistudentai.back() << endl;
         }
 
         else if (pasirinkimas == 2){
