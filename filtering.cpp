@@ -6,10 +6,10 @@
 #include "rikiavimas.h"
 using namespace std;
 
-pair<vector<studentas>, vector<studentas>> studentsplit(const vector<studentas>& visistudentai){
+pair<konteineris, konteineris> studentsplit(const konteineris& visistudentai){
 
-    vector<studentas> nerdai;
-    vector<studentas> nelaimingi;
+    konteineris nerdai;
+    konteineris nelaimingi;
 
     for (const auto& s : visistudentai){
         if (s.rezvidurkis < 5){
@@ -19,13 +19,12 @@ pair<vector<studentas>, vector<studentas>> studentsplit(const vector<studentas>&
         }
     }
 
-    pair <vector<studentas>, vector<studentas>> lists = make_pair(nerdai, nelaimingi);
-    return lists;
+    return make_pair(nerdai, nelaimingi);
 
 }
 
 
-void gradedfiles(const vector<studentas>& nerdai, const vector<studentas>& nelaimingi, string pavadinimas){
+void gradedfiles(konteineris& nerdai, konteineris& nelaimingi, string pavadinimas){
 
     string nerdfile = "nerdai_" + pavadinimas;
     ofstream failas1(nerdfile);
@@ -44,7 +43,7 @@ void gradedfiles(const vector<studentas>& nerdai, const vector<studentas>& nelai
 }
 
 
-void rusiavimoinfo(int rusiavimas, string paskutinisfailas, const vector<studentas>& visistudentai){
+void rusiavimoinfo(int rusiavimas, string paskutinisfailas, const konteineris& visistudentai){
 
     cout << "studentai rusiuojami..." << endl;
     auto t = clockstart();
@@ -54,14 +53,14 @@ void rusiavimoinfo(int rusiavimas, string paskutinisfailas, const vector<student
     auto t2 = clockstart();
 
     if (rusiavimas == 1){
-        sort(nerdai.begin(), nerdai.end(), pagalVarda);
-        sort(nelaimingi.begin(), nelaimingi.end(), pagalVarda);
+        nerdai.sort(pagalVarda);
+        nelaimingi.sort(pagalVarda);
     } else if (rusiavimas == 2){
-        sort(nerdai.begin(), nerdai.end(), pagalPavarde);
-        sort(nelaimingi.begin(), nelaimingi.end(), pagalPavarde);
+        nerdai.sort(pagalPavarde);
+        nelaimingi.sort(pagalPavarde);
     } else {
-        sort(nerdai.begin(), nerdai.end(), pagalGalutini);
-        sort(nelaimingi.begin(), nelaimingi.end(), pagalGalutini);
+        nerdai.sort(pagalGalutini);
+        nelaimingi.sort(pagalGalutini);
     }
     cout << "failai surikiuoti per: " << clockend(t2) << " sekundes" << endl;
 

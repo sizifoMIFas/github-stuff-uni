@@ -1,8 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-
-using konteineris = std::vector<studentas>;
+#include <list>
 
 struct studentas{
     std::string vardas;
@@ -12,3 +11,5 @@ struct studentas{
     double rezvidurkis;
     double rezmedian;
 };
+
+using konteineris = std::list<studentas>;

@@ -3,4 +3,4 @@
 #include "studentas.h"
 
 
-std::vector<studentas> fileread(std::string file);
+konteineris fileread(std::string file);

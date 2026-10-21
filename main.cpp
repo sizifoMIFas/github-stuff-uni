@@ -15,7 +15,7 @@ using namespace std;
 int main(){
 
     srand(time(0));
-    vector<studentas> visistudentai;
+    konteineris visistudentai;
     string vardas;
     string pavarde;
     string aware;
@@ -73,7 +73,7 @@ int main(){
 
             string choice;
 
-            sort(visistudentai.begin(), visistudentai.end(), lyginti);
+            visistudentai.sort(lyginti);
             printHeader();
             for (auto s : visistudentai) {
             results(s);
@@ -104,7 +104,7 @@ int main(){
             paskutinisfailas = file;
             
             auto t = clockstart();
-            vector<studentas> failoStudentai = fileread(file);
+            konteineris failoStudentai = fileread(file);
             cout << "failas nuskaitytas per: " << clockend(t) << " sekundes" << endl;
             for (auto s : failoStudentai) {
                 visistudentai.push_back(s);
@@ -134,3 +134,4 @@ int main(){
     return 0;
 
 }
+

@@ -7,10 +7,10 @@
 
 using namespace std;
 
-vector<studentas> fileread(string file){
+konteineris fileread(std::string file){
 
     ifstream failas(file);
-    vector<studentas> sarasas;
+    konteineris sarasas;
     string eilute;
 
     if (!failas.is_open()){
