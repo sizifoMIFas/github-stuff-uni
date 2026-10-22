@@ -10,3 +10,7 @@ main
 studentai_generated*.txt
 nerdai_*
 nelaimingi*
+bench.zsh
+main_list
+main_vector
+tmp.txt

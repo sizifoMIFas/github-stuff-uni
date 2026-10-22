@@ -60,3 +60,35 @@ g++ -std=c++17 -O2 main.cpp clock.cpp skaiciavimai.cpp rikiavimas.cpp menu.cpp g
 | 1000000 | 0.5465 | 0.0447 | 0.2683 | 0.8594 |
 | 10000000 | 5.6205 | 0.4774 | 2.7081 | 8.8059 |
  
+ # v0.3: std::vector ir std::list palyginimas
+
+## Testavimo sistema
+- CPU: Apple M4 Max
+- RAM: 36 GB
+- Diskas: SSD
+- Kompiliatorius: g++ -std=c++17 -O2
+- Metodika: kiekvienam failo dydžiui atlikti 3 testai, pateikiamas jų vidurkis. Abiem konteineriams naudoti tie patys failai.
+- Rūšiavimas: pagal galutinį balą (3 pasirinkimas), abiem konteineriams vienodai.
+- Vidurkiai apskaičiuoti naudojant nedidelį shell skriptą, kuris kelis kartus paleido programą.
+
+## Rezultatai (sekundėmis, 3 testų vidurkis)
+
+| Studentų sk. | Konteineris | Skaitymas | Skirstymas | Rūšiavimas | Rašymas |
+|---|---|---|---|---|---|
+| 1k | list | 0.0008 | 0.0000 | 0.0000 | 0.0000 |
+| 1k | vector | 0.0011 | 0.0000 | 0.0000 | 0.0000 |
+| 10k | list | 0.0058 | 0.0000 | 0.0000 | 0.0000 |
+| 10k | vector | 0.0062 | 0.0000 | 0.0000 | 0.0000 |
+| 100k | list | 0.0536 | 0.0100 | 0.0100 | 0.0300 |
+| 100k | vector | 0.0556 | 0.0067 | 0.0000 | 0.0300 |
+| 1m | list | 0.5484 | 0.0733 | 0.2000 | 0.2933 |
+| 1m | vector | 0.5623 | 0.0600 | 0.0333 | 0.2433 |
+| 10m | list | 5.5459 | 0.7633 | 5.0467 | 3.0133 |
+| 10m | vector | 5.6550 | 0.6133 | 0.3633 | 2.4267 |
+
+## Išvados
+- Didžiausias skirtumas matomas rūšiuojant. Su 10m įrašų list užtrunka apie 5 s, o vector apie 0.36 s (maždaug 14 kartų greičiau). Vector elementai atmintyje guli vienas šalia kito, todėl procesorius juos skaito greitai. List elementai išsimėtę po atmintį, todėl kiekvienas žingsnis yra lėtas šuolis į kitą vietą.
+- Skaitymo laikai abiem konteineriams panašūs, nes juos riboja disko greitis ir teksto apdorojimas.
+- Skirstymas į dvi grupes ir rašymas į failus su vector yra šiek tiek greitesni.
+- 1k ir 10k dydžių laikai per maži, kad juos būtų galima tiksliai išmatuoti naudojant šį laikmatį.
+- Atminties adresai: list elementų adresai nesikeičia, kol elementas saugomas. Vector, kai pritrūksta vietos, perkelia visus elementus į naują atminties bloką, todėl ankstesnių elementų adresai gali pasikeisti.
