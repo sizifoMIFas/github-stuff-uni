@@ -13,7 +13,11 @@ struct studentas{
     double rezmedian;
 };
 
+#ifdef USE_VECTOR
+using konteineris = std::vector<studentas>;
+#else
 using konteineris = std::list<studentas>;
+#endif // claude sugeneruota, kad galeciau atlikt greiciau benchmark'us
 
 template <typename C, typename Cmp>
 void rikiuoti(C& c, Cmp cmp){
