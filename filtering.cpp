@@ -52,16 +52,16 @@ void rusiavimoinfo(int rusiavimas, string paskutinisfailas, const konteineris& v
     cout << "failai rikiuojami..." << endl;
     auto t2 = clockstart();
 
-    if (rusiavimas == 1){
-        nerdai.sort(pagalVarda);
-        nelaimingi.sort(pagalVarda);
-    } else if (rusiavimas == 2){
-        nerdai.sort(pagalPavarde);
-        nelaimingi.sort(pagalPavarde);
-    } else {
-        nerdai.sort(pagalGalutini);
-        nelaimingi.sort(pagalGalutini);
-    }
+if (rusiavimas == 1){
+    rikiuoti(nerdai, pagalVarda);
+    rikiuoti(nelaimingi, pagalVarda);
+} else if (rusiavimas == 2){
+    rikiuoti(nerdai, pagalPavarde);
+    rikiuoti(nelaimingi, pagalPavarde);
+} else {
+    rikiuoti(nerdai, pagalGalutini);
+    rikiuoti(nelaimingi, pagalGalutini);
+}
     cout << "failai surikiuoti per: " << clockend(t2) << " sekundes" << endl;
 
     cout << "irasomi failai..." << endl;

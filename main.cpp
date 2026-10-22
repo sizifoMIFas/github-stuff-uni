@@ -74,7 +74,7 @@ int main(){
 
             string choice;
 
-            visistudentai.sort(lyginti);
+            rikiuoti(visistudentai, lyginti);
             printHeader();
             for (auto s : visistudentai) {
             results(s);

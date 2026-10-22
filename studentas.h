@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <algorithm>
 
 struct studentas{
     std::string vardas;
@@ -13,3 +14,12 @@ struct studentas{
 };
 
 using konteineris = std::list<studentas>;
+
+template <typename C, typename Cmp>
+void rikiuoti(C& c, Cmp cmp){
+    if constexpr (std::is_same_v<C, std::list<studentas>>){
+        c.sort(cmp);
+    } else {
+        std::sort(c.begin(), c.end(), cmp);
+    }
+}
