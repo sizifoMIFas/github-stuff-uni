@@ -66,7 +66,7 @@ void rusiavimoinfo(int rusiavimas, string paskutinisfailas, const konteineris& v
     konteineris nerdai, nelaimingi;
 
     if (strategija == 2){
-        nerdai = visistudentai;   // copy, so the original stays intact
+        nerdai = visistudentai;
     }
 
     cout << "studentai rusiuojami..." << endl;

@@ -1,9 +1,11 @@
 #pragma once
 #include "studentas.h"
 #include <string> 
+#include <utility>
+#include <iostream>
 
 
-void printHeader();
-void results(studentas s);
+void printHeader(std::ostream& out = std::cout);
+void results(studentas s, std::ostream& out = std::cout);
 std::string filechoice();
-int rusiavimomenu();
+std::pair<int, int> rusiavimomenu();

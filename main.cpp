@@ -1,5 +1,7 @@
 #include <iostream>
 #include <random>
+#include <iomanip>
+#include <fstream>
 #include "studentas.h"
 #include "clock.h"
 #include "skaiciavimai.h"
@@ -15,6 +17,7 @@ using namespace std;
 int main(){
 
     srand(time(0));
+    cout << fixed << setprecision(5);
     konteineris visistudentai;
     string vardas;
     string pavarde;
@@ -67,7 +70,6 @@ int main(){
             s.rezvidurkis = vidurkiscalc(ndpazymiai, egzrezultatas);
             s.rezmedian = mediancalc(ndpazymiai, egzrezultatas);
             visistudentai.push_back(s);
-            printHeader();
             results(visistudentai.back());
             cout << "saugojimo adresas atmintyje: " << &visistudentai.back() << endl;
         }
@@ -77,10 +79,15 @@ int main(){
             string choice;
 
             rikiuoti(visistudentai, lyginti);
-            printHeader();
-            for (auto s : visistudentai) {
-            results(s);
+            ofstream output("rezultatai.txt");
+            printHeader(output);
+            for (const auto& s : visistudentai) {
+                results(s, output);
             }
+            output.close();
+            cout << "" << endl;
+            cout << "rezultatai irasyti i rezultatai.txt" << endl;
+            
 
             while (choice != "Y" && choice != "N"){
                 cout << "" << endl;
@@ -90,8 +97,8 @@ int main(){
                 cin >> choice;
             
                 if (choice == "Y"){
-                int rusiavimas = rusiavimomenu();
-                rusiavimoinfo(rusiavimas, paskutinisfailas, visistudentai, 1);
+                auto [rusiavimas, strategija] = rusiavimomenu();
+                rusiavimoinfo(rusiavimas, paskutinisfailas, visistudentai, strategija);
                 }
 
                 else if (choice != "N"){               
@@ -108,6 +115,7 @@ int main(){
             
             auto t = clockstart();
             konteineris failoStudentai = fileread(file);
+            cout << "" << endl;
             cout << "failas nuskaitytas per: " << clockend(t) << " sekundes" << endl;
             for (auto s : failoStudentai) {
                 visistudentai.push_back(s);

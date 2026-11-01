@@ -4,10 +4,10 @@
 #include <string>
 using namespace std;
 
-void printHeader(){
+void printHeader(ostream& out){
 
-    cout << fixed << setprecision(2);
-    cout << left
+    out << fixed << setprecision(5);
+    out << left
     << setw(20) << "Pavarde"
     << setw(20) << "vardas"
     << setw(20) << "Galutinis (vid)"
@@ -15,9 +15,9 @@ void printHeader(){
 
 }
 
-void results(studentas s){
+void results(studentas s, ostream& out){
 
-    cout << left
+    out << left
     << setw(20) << s.pavarde
     << setw(20) << s.vardas
     << setw(20) << s.rezvidurkis
@@ -106,9 +106,10 @@ string filechoice(){
 
 }
 
-int rusiavimomenu(){
+pair<int, int> rusiavimomenu(){
 
     int pasirinkimas = 0;
+    int strategija = 0;
 
     while (pasirinkimas < 1 || pasirinkimas > 3){
 
@@ -130,6 +131,17 @@ int rusiavimomenu(){
         }
     }
 
-    return pasirinkimas;
+    while (strategija < 1 || strategija > 3){
+
+        cout << "" << endl;
+        cout << "kuria strategija naudoti?:" << endl;
+        cout << "1. " << endl;
+        cout << "2. " << endl;
+        cout << "3. " << endl;
+        cin >> strategija;
+
+    }
+
+    return {pasirinkimas, strategija};
 
 }
