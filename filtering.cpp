@@ -24,6 +24,24 @@ pair<konteineris, konteineris> studentsplit(const konteineris& visistudentai){
 }
 
 
+konteineris studentsplit2(konteineris& visistudentai){
+
+    konteineris nelaimingi;
+
+    auto it = visistudentai.begin();
+    while (it != visistudentai.end()){
+        if (it->rezvidurkis < 5){
+            nelaimingi.push_back(*it);
+            it = visistudentai.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    return nelaimingi;
+}
+
+
 void gradedfiles(konteineris& nerdai, konteineris& nelaimingi, string pavadinimas){
 
     string nerdfile = "nerdai_" + pavadinimas;
@@ -53,18 +71,24 @@ void rusiavimoinfo(int rusiavimas, string paskutinisfailas, const konteineris& v
     auto t2 = clockstart();
 
 if (rusiavimas == 1){
+
     rikiuoti(nerdai, pagalVarda);
     rikiuoti(nelaimingi, pagalVarda);
+
 } else if (rusiavimas == 2){
+
     rikiuoti(nerdai, pagalPavarde);
     rikiuoti(nelaimingi, pagalPavarde);
+
 } else {
+
     rikiuoti(nerdai, pagalGalutini);
     rikiuoti(nelaimingi, pagalGalutini);
+
 }
     cout << "failai surikiuoti per: " << clockend(t2) << " sekundes" << endl;
-
     cout << "irasomi failai..." << endl;
+    
     auto t3 = clockstart();
     gradedfiles(nerdai, nelaimingi, paskutinisfailas);
     cout << "failai irasyti per: " << clockend(t3) << " sekundes" << endl;
