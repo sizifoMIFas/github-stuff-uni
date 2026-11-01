@@ -61,13 +61,25 @@ void gradedfiles(konteineris& nerdai, konteineris& nelaimingi, string pavadinima
 }
 
 
-void rusiavimoinfo(int rusiavimas, string paskutinisfailas, const konteineris& visistudentai){
+void rusiavimoinfo(int rusiavimas, string paskutinisfailas, const konteineris& visistudentai, int strategija){
+
+    konteineris nerdai, nelaimingi;
+
+    if (strategija == 2){
+        nerdai = visistudentai;   // copy, so the original stays intact
+    }
 
     cout << "studentai rusiuojami..." << endl;
     auto t = clockstart();
-    auto [nerdai, nelaimingi] = studentsplit(visistudentai);
+
+    if (strategija == 1){
+        tie(nerdai, nelaimingi) = studentsplit(visistudentai);
+    } else {
+        nelaimingi = studentsplit2(nerdai);
+    }
+
     cout << "studentai surusiuoti per: " << clockend(t) << " sekundes" << endl;
-    cout << "failai rikiuojami..." << endl;
+
     auto t2 = clockstart();
 
 if (rusiavimas == 1){

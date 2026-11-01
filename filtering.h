@@ -7,4 +7,4 @@
 std::pair<konteineris, konteineris> studentsplit(const konteineris& visistudentai);
 konteineris studentsplit2(konteineris& visistudentai);
 void gradedfiles(const konteineris& nerdai, const konteineris& nelaimingi, std::string pavadinimas);
-void rusiavimoinfo(int rusiavimas, std::string paskutinisfailas, const konteineris& visistudentai);
+void rusiavimoinfo(int rusiavimas, std::string paskutinisfailas, const konteineris& visistudentai, int strategija);

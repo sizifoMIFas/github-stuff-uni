@@ -91,7 +91,7 @@ int main(){
             
                 if (choice == "Y"){
                 int rusiavimas = rusiavimomenu();
-                rusiavimoinfo(rusiavimas, paskutinisfailas, visistudentai);
+                rusiavimoinfo(rusiavimas, paskutinisfailas, visistudentai, 1);
                 }
 
                 else if (choice != "N"){               
