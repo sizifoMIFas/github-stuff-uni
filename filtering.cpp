@@ -42,6 +42,19 @@ konteineris studentsplit2(konteineris& visistudentai){
 }
 
 
+konteineris studentsplit3(konteineris& visistudentai){
+
+    auto riba = std::stable_partition(visistudentai.begin(), visistudentai.end(),
+        [](const studentas& s){ return s.rezvidurkis >= 5; });
+
+    konteineris nelaimingi(riba, visistudentai.end());
+
+    visistudentai.erase(riba, visistudentai.end());
+
+    return nelaimingi;
+}
+
+
 void gradedfiles(konteineris& nerdai, konteineris& nelaimingi, string pavadinimas){
 
     string nerdfile = "nerdai_" + pavadinimas;
