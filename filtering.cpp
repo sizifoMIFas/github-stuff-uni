@@ -78,7 +78,7 @@ void rusiavimoinfo(int rusiavimas, string paskutinisfailas, const konteineris& v
 
     konteineris nerdai, nelaimingi;
 
-    if (strategija == 2){
+    if (strategija == 2 || strategija == 3){
         nerdai = visistudentai;
     }
 
@@ -87,8 +87,10 @@ void rusiavimoinfo(int rusiavimas, string paskutinisfailas, const konteineris& v
 
     if (strategija == 1){
         tie(nerdai, nelaimingi) = studentsplit(visistudentai);
-    } else {
+    } else if (strategija == 2){
         nelaimingi = studentsplit2(nerdai);
+    } else {
+        nelaimingi = studentsplit3(nerdai);
     }
 
     cout << "studentai surusiuoti per: " << clockend(t) << " sekundes" << endl;
