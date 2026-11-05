@@ -74,13 +74,9 @@ void gradedfiles(konteineris& nerdai, konteineris& nelaimingi, string pavadinima
 }
 
 
-void rusiavimoinfo(int rusiavimas, string paskutinisfailas, const konteineris& visistudentai, int strategija){
+void rusiavimoinfo(int rusiavimas, string paskutinisfailas, konteineris& visistudentai, int strategija){
 
     konteineris nerdai, nelaimingi;
-
-    if (strategija == 2 || strategija == 3){
-        nerdai = visistudentai;
-    }
 
     cout << "studentai rusiuojami..." << endl;
     auto t = clockstart();
@@ -88,34 +84,38 @@ void rusiavimoinfo(int rusiavimas, string paskutinisfailas, const konteineris& v
     if (strategija == 1){
         tie(nerdai, nelaimingi) = studentsplit(visistudentai);
     } else if (strategija == 2){
-        nelaimingi = studentsplit2(nerdai);
+        nelaimingi = studentsplit2(visistudentai);
+        nerdai.swap(visistudentai);
     } else {
-        nelaimingi = studentsplit3(nerdai);
+        nelaimingi = studentsplit3(visistudentai);
+        nerdai.swap(visistudentai);
     }
 
     cout << "studentai surusiuoti per: " << clockend(t) << " sekundes" << endl;
+    cout << "studentu atmintyje: " << visistudentai.size() + nerdai.size() + nelaimingi.size() << endl;
 
     auto t2 = clockstart();
 
-if (rusiavimas == 1){
+    if (rusiavimas == 1){
 
-    rikiuoti(nerdai, pagalVarda);
-    rikiuoti(nelaimingi, pagalVarda);
+        rikiuoti(nerdai, pagalVarda);
+        rikiuoti(nelaimingi, pagalVarda);
 
-} else if (rusiavimas == 2){
+    } else if (rusiavimas == 2){
 
-    rikiuoti(nerdai, pagalPavarde);
-    rikiuoti(nelaimingi, pagalPavarde);
+        rikiuoti(nerdai, pagalPavarde);
+        rikiuoti(nelaimingi, pagalPavarde);
 
-} else {
+    } else {
 
-    rikiuoti(nerdai, pagalGalutini);
-    rikiuoti(nelaimingi, pagalGalutini);
+        rikiuoti(nerdai, pagalGalutini);
+        rikiuoti(nelaimingi, pagalGalutini);
 
-}
+    }
+
     cout << "failai surikiuoti per: " << clockend(t2) << " sekundes" << endl;
     cout << "irasomi failai..." << endl;
-    
+
     auto t3 = clockstart();
     gradedfiles(nerdai, nelaimingi, paskutinisfailas);
     cout << "failai irasyti per: " << clockend(t3) << " sekundes" << endl;
