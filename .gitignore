@@ -21,3 +21,5 @@ nelaimingi_*
 rezultatai.txt
 *.tmp
 studentai*.txt
+*.txt
+.DS_Store
